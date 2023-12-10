@@ -1,8 +1,9 @@
 {
   "mongodb": {
     "host": "127.0.0.1",
-    "username": "root",
-    "password": "",
+    "username": "mongok",
+    "password": "mongopass",
+    "database": "kitsxki",
     "port": 27017
   },
   "redis": {

@@ -23,9 +23,9 @@ public class Redis {
     private final Map<String, RTopic> subscribedChannels = new HashMap<>();
 
     @NotNull
-    private final MCTDLogger logger;
-    @NotNull
     private final Config config;
+    @NotNull
+    private final MCTDLogger logger;
 
     @Nullable
     private RedissonClient client;
@@ -40,35 +40,34 @@ public class Redis {
             serverConfig.setUsername(credentials.getPassword());
         serverConfig.setDatabase(credentials.getDatabase());
 
-        this.logger = new MCTDLogger("Redis");
         this.config = config;
+        this.logger = new MCTDLogger("Redis");
     }
 
     public void initConnection() {
+        if(this.client != null)
+            return;
+
         new Thread(() -> this.client = Redisson.create(this.config), "Redis").start();
-        this.logger.info("Successfully initialized Redis connection.");
+        this.logger.info("Successfully initialized the Redis connection.");
     }
 
-    public void closeConnection() {
+    public void closeConnection() throws ExecutionException, InterruptedException {
         if(this.client == null)
             return;
 
-        try {
-            this.unsubscribeAll()
-                    .thenAccept(voidObject -> {
-                        this.client.shutdown();
-                        this.client = null;
-                        this.logger.info("Successfully closed Redis connection.");
-                    })
-                    .exceptionally(err -> {
-                        this.logger.severe("An error occurred while unsubscribing to all channels!");
-                        this.logger.severe(err.getMessage());
-                        return null;
-                    })
-                    .get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        this.unsubscribeAll()
+                .thenAccept(voidObject -> {
+                    this.client.shutdown();
+                    this.client = null;
+                    this.logger.info("Successfully closed the Redis connection.");
+                })
+                .exceptionally(err -> {
+                    this.logger.severe("An error occurred while unsubscribing to all channels!");
+                    this.logger.severe(err.getMessage());
+                    return null;
+                })
+                .get();
     }
 
     public <M> void publish(final @NotNull String channel, final @NotNull M message, final boolean failNotSubscribe) {
