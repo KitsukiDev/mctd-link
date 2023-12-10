@@ -17,8 +17,6 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains:annotations:24.1.0")
-        implementation("cloud.commandframework:cloud-paper:1.8.4")
-        implementation("cloud.commandframework:cloud-annotations:1.8.4")
     }
 
     val targetJavaVersion = JavaVersion.VERSION_1_8

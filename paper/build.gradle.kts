@@ -6,6 +6,8 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
+    implementation("cloud.commandframework:cloud-paper:1.8.4")
+    implementation("cloud.commandframework:cloud-annotations:1.8.4")
     compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
 }
 
