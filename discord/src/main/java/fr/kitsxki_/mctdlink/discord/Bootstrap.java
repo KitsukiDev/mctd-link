@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Bootstrap {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws InterruptedException {
         final @NotNull MCTDLinkDiscord application = new MCTDLinkDiscord();
         application.init();
 
