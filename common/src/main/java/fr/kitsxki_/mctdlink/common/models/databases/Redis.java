@@ -1,7 +1,6 @@
 package fr.kitsxki_.mctdlink.common.models.databases;
 
 import fr.kitsxki_.mctdlink.common.impl.databases.models.credentials.RedisCredentials;
-import fr.kitsxki_.mctdlink.common.models.MCTDLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.redisson.Redisson;
@@ -11,6 +10,8 @@ import org.redisson.api.listener.MessageListener;
 import org.redisson.client.RedisConnectionException;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class Redis {
     @NotNull
     private final Config config;
     @NotNull
-    private final MCTDLogger logger;
+    private final Logger logger;
 
     @Nullable
     private RedissonClient client;
@@ -41,7 +42,7 @@ public class Redis {
         serverConfig.setDatabase(credentials.getDatabase());
 
         this.config = config;
-        this.logger = new MCTDLogger("Redis");
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public void initConnection() {
@@ -63,8 +64,8 @@ public class Redis {
                     this.logger.info("Successfully closed the Redis connection.");
                 })
                 .exceptionally(err -> {
-                    this.logger.severe("An error occurred while unsubscribing to all channels!");
-                    this.logger.severe(err.getMessage());
+                    this.logger.error("An error occurred while unsubscribing to all channels!");
+                    this.logger.error(err.getMessage());
                     return null;
                 })
                 .get();
@@ -80,8 +81,8 @@ public class Redis {
         topic.publishAsync(message)
                 .thenAcceptAsync(receiversCount -> this.logger.info(String.format("Successfully published %s to %s!", message, channel)))
                 .exceptionally(err -> {
-                    this.logger.severe(String.format("An error occurred while publishing %s to %s!", message, channel));
-                    this.logger.severe(err.getMessage());
+                    this.logger.error(String.format("An error occurred while publishing %s to %s!", message, channel));
+                    this.logger.error(err.getMessage());
                     return null;
                 });
     }
@@ -94,8 +95,8 @@ public class Redis {
         topic.publishAsync(message)
                 .thenAcceptAsync(receiversCount -> this.logger.info(String.format("Successfully published %s to %s!", message, channel)))
                 .exceptionally(err -> {
-                    this.logger.severe(String.format("An error occurred while publishing %s to %s!", message, channel));
-                    this.logger.severe(err.getMessage());
+                    this.logger.error(String.format("An error occurred while publishing %s to %s!", message, channel));
+                    this.logger.error(err.getMessage());
                     return null;
                 });
     }
@@ -111,8 +112,8 @@ public class Redis {
                     this.logger.info(String.format("Successfully subscribed to %s!", channel));
                 })
                 .exceptionally(err -> {
-                    this.logger.severe(String.format("An error occurred while subscribing to %s!", channel));
-                    this.logger.severe(err.getMessage());
+                    this.logger.error(String.format("An error occurred while subscribing to %s!", channel));
+                    this.logger.error(err.getMessage());
                     return null;
                 });
     }
@@ -125,8 +126,8 @@ public class Redis {
             this.subscribedChannels.remove(channel).removeAllListenersAsync()
                     .thenAcceptAsync(voidObject -> this.logger.info(String.format("Successfully unsubscribed to %s!", channel)))
                     .exceptionally(err -> {
-                        this.logger.severe(String.format("An error occurred while unsubscribing to %s!", channel));
-                        this.logger.severe(err.getMessage());
+                        this.logger.error(String.format("An error occurred while unsubscribing to %s!", channel));
+                        this.logger.error(err.getMessage());
                         return null;
                     });
 

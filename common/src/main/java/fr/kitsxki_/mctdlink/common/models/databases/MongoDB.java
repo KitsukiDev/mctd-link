@@ -5,16 +5,17 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import fr.kitsxki_.mctdlink.common.impl.databases.models.credentials.MongoDBCredentials;
-import fr.kitsxki_.mctdlink.common.models.MCTDLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MongoDB {
 
     @NotNull
     private final MongoClientSettings settings;
     @NotNull
-    private final MCTDLogger logger;
+    private final Logger logger;
 
     @Nullable
     private MongoClient client;
@@ -25,7 +26,7 @@ public class MongoDB {
                 .build();
 
         this.settings = settings;
-        this.logger = new MCTDLogger("MongoDB");
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public void initConnection() {
@@ -42,6 +43,7 @@ public class MongoDB {
 
         this.client.close();
         this.client = null;
+        this.logger.info("Successfully closed the MongoDB connection.");
     }
 
     @Nullable

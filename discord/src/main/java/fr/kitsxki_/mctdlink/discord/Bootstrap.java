@@ -6,7 +6,7 @@ public class Bootstrap {
 
     public static void main(final String[] args) {
         final @NotNull MCTDLinkDiscord application = new MCTDLinkDiscord();
-        application.enable();
+        application.init();
 
         Runtime.getRuntime().addShutdownHook(
                 new Thread(

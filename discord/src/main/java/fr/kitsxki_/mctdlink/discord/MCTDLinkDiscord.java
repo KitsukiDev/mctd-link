@@ -42,7 +42,7 @@ public final class MCTDLinkDiscord {
         this.databasesService = new DatabasesServiceImpl(databasesConfiguration);
     }
 
-    public void enable() {
+    public void init() {
         this.databasesService.initDatabases();
     }
 

@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":common"))
+    implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation("net.dv8tion:JDA:5.0.0-beta.18") {
         exclude(module = "opus-java")
     }
