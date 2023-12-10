@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class MongoDBCredentials {
+public final class MongoDBCredentials {
 
     @NotNull
     private final String host;

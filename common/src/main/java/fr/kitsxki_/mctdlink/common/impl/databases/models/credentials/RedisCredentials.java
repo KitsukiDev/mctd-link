@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class RedisCredentials {
+public final class RedisCredentials {
 
     @NotNull
     private final String host;

@@ -4,7 +4,7 @@ import fr.kitsxki_.mctdlink.common.impl.databases.models.credentials.MongoDBCred
 import fr.kitsxki_.mctdlink.common.impl.databases.models.credentials.RedisCredentials;
 import org.jetbrains.annotations.NotNull;
 
-public class DatabasesConfiguration {
+public final class DatabasesConfiguration {
 
     @NotNull
     public RedisCredentials redis;

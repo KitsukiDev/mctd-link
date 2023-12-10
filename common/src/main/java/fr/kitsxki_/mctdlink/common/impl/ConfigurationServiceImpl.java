@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ConfigurationServiceImpl implements ConfigurationService {
+public final class ConfigurationServiceImpl implements ConfigurationService {
 
     @NotNull
     private final ObjectMapper mapper;

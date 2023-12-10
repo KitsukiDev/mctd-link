@@ -1,4 +1,4 @@
-package fr.kitsxki_.mctdlink.common.models.databases;
+package fr.kitsxki_.mctdlink.common.models;
 
 import fr.kitsxki_.mctdlink.common.impl.databases.models.credentials.RedisCredentials;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +89,7 @@ public class Redis {
 
     private <M> void publish(final @NotNull String channel, final @NotNull M message) {
         if(this.client == null)
-            throw new RedisConnectionException("Redis connection is not initialized yet!");
+            throw new RedisConnectionException("The Redis connection is not initialized yet!");
 
         final @NotNull RTopic topic = this.client.getTopic(channel);
         topic.publishAsync(message)
@@ -103,7 +103,7 @@ public class Redis {
 
     public <M> void subscribe(final @NotNull String channel, final @NotNull Class<M> clazz, final @NotNull MessageListener<M> messageListener) {
         if(this.client == null)
-            throw new RedisConnectionException("Redis connection is not initialized yet!");
+            throw new RedisConnectionException("The Redis connection is not initialized yet!");
 
         final @NotNull RTopic topic = this.client.getTopic(channel);
         topic.addListenerAsync(clazz, messageListener)
@@ -150,8 +150,11 @@ public class Redis {
         });
     }
 
-    @Nullable
+    @NotNull
     public RedissonClient getClient() {
+        if(this.client == null)
+            throw new RedisConnectionException("The Redis connection is not initialized yet!");
+
         return this.client;
     }
 }
