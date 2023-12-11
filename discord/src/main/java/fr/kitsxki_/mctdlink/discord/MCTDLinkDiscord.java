@@ -2,14 +2,20 @@ package fr.kitsxki_.mctdlink.discord;
 
 import fr.kitsxki_.mctdlink.common.api.ConfigurationService;
 import fr.kitsxki_.mctdlink.common.api.DatabasesService;
+import fr.kitsxki_.mctdlink.common.api.LinkService;
+import fr.kitsxki_.mctdlink.common.api.LinkedPlayerService;
 import fr.kitsxki_.mctdlink.common.impl.ConfigurationServiceImpl;
 import fr.kitsxki_.mctdlink.common.impl.databases.DatabasesServiceImpl;
 import fr.kitsxki_.mctdlink.common.impl.databases.models.DatabasesConfiguration;
+import fr.kitsxki_.mctdlink.common.impl.link.LinkServiceImpl;
+import fr.kitsxki_.mctdlink.common.impl.players.LinkedEntryServiceImpl;
 import fr.kitsxki_.mctdlink.discord.api.CommandsService;
+import fr.kitsxki_.mctdlink.discord.commands.LinkCommand;
 import fr.kitsxki_.mctdlink.discord.impl.CommandsServiceImpl;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +27,8 @@ public final class MCTDLinkDiscord {
 
     @NotNull
     private final DatabasesService databasesService;
+    @Nullable
+    private LinkService linkService;
     @NotNull
     private final JDA jda;
 
@@ -53,8 +61,13 @@ public final class MCTDLinkDiscord {
     public void init() {
         this.databasesService.initDatabases();
 
+        final @NotNull LinkedPlayerService linkedPlayerService = new LinkedEntryServiceImpl(this.databasesService);
+        this.linkService = new LinkServiceImpl(linkedPlayerService, this.databasesService);
+
         final @NotNull CommandsService commandsService = new CommandsServiceImpl(this.jda);
-        this.registerCommands(commandsService);
+        this.registerCommands(commandsService, new Object[] {
+                new LinkCommand(this.linkService)
+        });
 
         this.jda.addEventListener(commandsService);
     }
@@ -68,5 +81,15 @@ public final class MCTDLinkDiscord {
             jdaCommands.forEach(c -> c.delete().queue());
             commandsService.registerCommands(commands);
         });
+    }
+
+    @NotNull
+    public DatabasesService getDatabasesService() {
+        return this.databasesService;
+    }
+
+    @Nullable
+    public LinkService getLinkService() {
+        return this.linkService;
     }
 }

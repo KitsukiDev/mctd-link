@@ -49,7 +49,8 @@ public class Redis {
         if(this.client != null)
             return;
 
-        new Thread(() -> this.client = Redisson.create(this.config), "Redis").start();
+        this.client = Redisson.create(this.config);
+        /*new Thread(() -> this.client = Redisson.create(this.config), "Redis").start();*/
         this.logger.info("Successfully initialized the Redis connection.");
     }
 

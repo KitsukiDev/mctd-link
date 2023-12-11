@@ -82,9 +82,9 @@ public final class LinkedEntryServiceImpl implements LinkedPlayerService {
     public CompletableFuture<LinkedEntry> getPlayer(final @NotNull String discordId) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return this.playerMap.getAsync(
+                return this.uniqueIdMap.containsKeyAsync(discordId).get() ? this.playerMap.getAsync(
                         this.uniqueIdMap.getAsync(discordId).get(5, TimeUnit.SECONDS)
-                ).get(5, TimeUnit.SECONDS);
+                ).get(5, TimeUnit.SECONDS) : null;
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 throw new RuntimeException(e);
             }

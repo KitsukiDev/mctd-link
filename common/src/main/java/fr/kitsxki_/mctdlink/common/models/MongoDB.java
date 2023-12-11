@@ -37,11 +37,14 @@ public class MongoDB {
                 .applyConnectionString(new ConnectionString(credentials.toConnectionString()))
                 .build();
 
-        new Thread(() -> {
+        /*new Thread(() -> {
             final @NotNull MongoClient client = MongoClients.create(settings);
             this.client = client;
             this.database = client.getDatabase(this.credentials.getDatabase());
-        }, "MongoDB");
+        }, "MongoDB");*/
+        final @NotNull MongoClient client = MongoClients.create(settings);
+        this.client = client;
+        this.database = client.getDatabase(this.credentials.getDatabase());
         this.logger.info("Successfully initialized the MongoDB connection.");
     }
 

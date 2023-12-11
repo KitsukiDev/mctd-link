@@ -11,6 +11,8 @@ import fr.kitsxki_.mctdlink.common.impl.players.models.LinkedEntry;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
 import java.util.UUID;
@@ -57,10 +59,13 @@ public final class LinkServiceImpl implements LinkService {
     private final LinkedPlayerService linkedPlayerService;
     @NotNull
     private final MongoDatabase database;
+    @NotNull
+    private final Logger logger;
 
     public LinkServiceImpl(final @NotNull LinkedPlayerService linkedPlayerService, final @NotNull DatabasesService databasesService) {
         this.linkedPlayerService = linkedPlayerService;
         this.database = databasesService.getMongoDB().getDatabase();
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     @Override
@@ -97,7 +102,7 @@ public final class LinkServiceImpl implements LinkService {
 
             tempCodes.insertOne(jsonTempCode);
 
-            return new CodeResult.Created(jsonTempCode.getString(tempCode));
+            return new CodeResult.Created(tempCode);
         });
     }
 
@@ -148,14 +153,13 @@ public final class LinkServiceImpl implements LinkService {
             final @NotNull SecureRandom random = new SecureRandom();
 
             final @NotNull StringBuilder code = new StringBuilder();
-            while(this.database.getCollection(TEMPORARY_CODES_COLLECTION).find(new Document(TEMP_CODE_KEY, code)).first() != null) {
-                for(int i = 0; i < 16; i++) {
-                    final int randomIndex = random.nextInt(CHARACTERS.length());
-                    final char randomChar = CHARACTERS.charAt(randomIndex);
-                    code.append(randomChar);
-                }
+            for(int i = 0; i < 16; i++) {
+                final int randomIndex = random.nextInt(CHARACTERS.length());
+                final char randomChar = CHARACTERS.charAt(randomIndex);
+                code.append(randomChar);
             }
 
+            this.logger.info(String.format("Successfully generated a new random code: %s", code));
             return code.toString();
         });
     }

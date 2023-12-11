@@ -34,16 +34,9 @@ public class CommandsServiceImpl extends ListenerAdapter implements CommandsServ
     @Override
     public void registerCommand(final @NotNull Object command) {
         for(final @NotNull Method method : command.getClass().getDeclaredMethods()) {
-            if(!method.isAnnotationPresent(CommandMethod.class)) {
-                this.logger.error("Failed to register the command with the following method name: " + method.getName() + " : No CommandMethod annotation found.");
+            if(!method.isAnnotationPresent(CommandMethod.class) || method.getParameterCount() < 1
+                    || method.getParameters()[0].getType() != SlashCommandInteractionEvent.class)
                 continue;
-            } else if(method.getParameterCount() < 1) {
-                this.logger.error("Failed to register the command with the following method name: " + method.getName() + " : No parameters found.");
-                continue;
-            } else if(method.getParameters()[0].getType() != SlashCommandInteractionEvent.class) {
-                this.logger.error("Failed to register the command with the following method name: " + method.getName() + " : Invalid parameter type found.");
-                continue;
-            }
 
             final @NotNull CommandMethod commandMethod = method.getAnnotation(CommandMethod.class);
             final @NotNull String commandName = commandMethod.name();
