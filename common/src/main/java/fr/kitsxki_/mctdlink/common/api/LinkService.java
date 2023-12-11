@@ -10,8 +10,11 @@ import java.util.concurrent.CompletableFuture;
 public interface LinkService {
 
     @NotNull
-    CompletableFuture<CodeResult> getLinkCode(final @NotNull String userId);
+    CompletableFuture<CodeResult> getLinkCode(final @NotNull String discordId, final String discordName);
 
     @NotNull
-    CompletableFuture<LinkResult> linkPlayer(final @NotNull UUID uniqueId, final @NotNull String name, final @NotNull String code);
+    CompletableFuture<LinkResult> linkPlayer(final @NotNull UUID minecraftId, final @NotNull String minecraftName, final @NotNull String code);
+
+    @NotNull
+    CompletableFuture<String> generateRandomCode();
 }

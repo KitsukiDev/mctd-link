@@ -3,3 +3,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
     implementation("org.redisson:redisson:3.25.0")
 }
+
+base {
+    archivesName.set("mctdlink-common")
+}

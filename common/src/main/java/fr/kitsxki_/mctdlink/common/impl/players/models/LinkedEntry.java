@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class LinkedPlayer {
+public final class LinkedEntry {
 
     @NotNull
     private final UUID minecraftId;
@@ -15,7 +15,7 @@ public final class LinkedPlayer {
     @NotNull
     private final String discordName;
 
-    public LinkedPlayer(
+    public LinkedEntry(
             final @NotNull UUID minecraftId,
             final @NotNull String minecraftName,
             final @NotNull String discordId,

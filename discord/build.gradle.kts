@@ -6,6 +6,10 @@ dependencies {
     }
 }
 
+base {
+    archivesName.set("mctdlink-discord")
+}
+
 tasks.shadowJar {
     manifest {
         attributes(Pair("Main-Class", "fr.kitsxki_.mctdlink.discord.Bootstrap"))
